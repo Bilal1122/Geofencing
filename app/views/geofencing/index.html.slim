@@ -1,1 +1,114 @@
-h1 GeoFencing
+= javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places&key=AIzaSyDaMIwD-73f2_FuvWcAm0olLBYwMTkR9os&callback=initMap", defer: "defer"
+
+.centered style="text-align:center;"
+  h1 GeoFencing
+  br
+  = form_for :geofencing, url: get_position_geofencing_index_path , method: "post" ,html: {class: 'ui form', id: "geofencing_form"} do |f|
+    p.heading Insert Location To Get Position
+    br
+    = f.text_field :address, placeholder: "Enter your location here", required: true
+    = f.hidden_field :lat
+    = f.hidden_field :long
+    = f.hidden_field :count
+
+#map-canvas style="height: 600px;"
+
+
+javascript:
+  var map;
+  var infoWindow;
+  check_pick_up_lat_long();
+
+  // Define the LatLng coordinates for the outSkirt polygon.
+  var outSkirtCoords = [
+    { lat: 51.540997, lng: -0.128403 },
+    { lat: 51.549965, lng: -0.097504 },
+    { lat: 51.540997, lng: -0.073128 },
+    { lat: 51.527756, lng: -0.069695 },
+    { lat: 51.517930, lng: -0.075531 },
+    { lat: 51.510452, lng: -0.106430 },
+    { lat: 51.514512, lng: -0.131149 },
+    { lat: 51.529892, lng: -0.133553 }
+  ];
+
+  // Define the LatLng coordinates for the central polygon.
+  var centralCoords = [
+    {lat: 51.534164, lng: -0.122223 }, 
+    {lat: 51.543132, lng: -0.107460 }, 
+    {lat: 51.542705, lng: -0.090294 }, 
+    {lat: 51.534804, lng: -0.077934 }, 
+    {lat: 51.521775 ,lng: -0.080681 }, 
+    {lat: 51.516862, lng: -0.101624 }, 
+    {lat: 51.521134, lng: -0.121536 }
+  ];
+
+  function initMap(lat, long) {
+    if (lat !== undefined){
+      center_point = {lat: lat, lng: long}
+    }
+    else{
+      center_point = {lat: 51.533221, lng: -0.105228}
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'), {
+      zoom: 13,
+      center: center_point
+    });
+
+    //Construct the outSkirt polygon.
+    var outSkirtTriangle = new google.maps.Polygon({
+      paths: outSkirtCoords,
+      strokeColor: 'white',
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      fillColor: '#6eacf3',
+      fillOpacity: 0.70
+    });
+
+    // Construct the central polygon.
+    var centralTriangle = new google.maps.Polygon({
+      paths: centralCoords,
+      strokeColor: 'white',
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      fillColor: '#42b388',
+      fillOpacity: 0.50
+    });
+
+    // var marker = new google.maps.Marker({
+    //   position: {lat: 51.533221, lng: -0.105228},
+    //   map: map,
+    //   title: 'Hello World!'
+    // });
+
+    if (lat !== undefined){
+      pick_up = {lat: lat, lng: long}
+      var marker = new google.maps.Marker({
+        position: pick_up,
+        map: map,
+        title: 'Hello World!'
+      });
+    };
+    outSkirtTriangle.setMap(map);
+    centralTriangle.setMap(map);
+    infoWindow = new google.maps.InfoWindow;
+  };
+
+  function check_pick_up_lat_long() {
+    setInterval((function() {
+      var lat = document.getElementById("geofencing_lat").value
+      var long = document.getElementById("geofencing_long").value
+      var count = parseInt(document.getElementById("geofencing_count").value)
+      if (lat !== "") {
+        if (count == 0) {
+          initMap(parseFloat(lat), parseFloat(long) );
+          document.getElementById("geofencing_count").value = 1
+        }
+      }else{
+        return console.log("no lat-long");
+      };
+    }), 1000);
+  };
+
+
+
+
