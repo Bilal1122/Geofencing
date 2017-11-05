@@ -1,0 +1,12 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: goget_development
+
+test:
+  <<: *default
+  database: goget_test
