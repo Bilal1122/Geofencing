@@ -32,6 +32,10 @@ gem 'slim-rails'
 #geo kit for geofencing
 gem 'geokit-rails'
 
+#debugger
+gem 'pry-byebug'
+gem 'pry-rails'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
