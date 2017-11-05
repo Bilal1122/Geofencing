@@ -8,3 +8,17 @@ $ ->
     document.getElementById("geofencing_lat").value = pickup_lat
     document.getElementById("geofencing_long").value = pickup_long
     document.getElementById("geofencing_count").value = 0
+    getData(pickup_lat, pickup_long)
+
+  getData = (lat, long)->
+    $.ajax
+      url: '/geofencing/get_position'
+      method: 'POST'
+      dataType: 'json'
+      data:
+        'pick_up_lat': lat
+        'pick_up_long': long
+      success: (result) ->
+        setTimeout (->
+          alert(result.location_in)
+        ), 1000
