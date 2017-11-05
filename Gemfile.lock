@@ -83,7 +83,7 @@ GEM
     multi_json (1.12.2)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
-    pg (0.21.0)
+    pg (0.20.0)
     pry (0.11.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -180,7 +180,7 @@ DEPENDENCIES
   geokit-rails
   jbuilder (~> 2.0)
   jquery-rails
-  pg
+  pg (~> 0.20.0)
   pry-byebug
   pry-rails
   rails (= 4.2.4)
